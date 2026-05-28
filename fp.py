@@ -1,86 +1,3 @@
-Lolito67
-manguconhuevo_
-Invisible
-
-Helado de chocolate (Frio) [GMBL],  — 8:04 PM
-faisal q tu vas a hacer
-osea cual es tu parte
-Lolito67 [V5RC],  — 8:12 PM
-yo voy hacer lo del moviemiento y todo eso
-no se porquer dialer gabriel se queja
-el hizo algo pila de simple
-el solo pocisiono todo
-Markiston — 8:13 PM
-compai yo hize el dado y me faltasn mas fichas
-Lolito67 [V5RC],  — 8:13 PM
-todo eso e pila de facil
-acabod e ver el codigo
-Markiston — 8:13 PM
-yo tuve quer cambiar el codigo del dado
-para que sean dos
-y que se spineen diferente
-Lolito67 [V5RC],  — 8:14 PM
-tt pero sigue siendo facil puede que te haya tomado tiempo
-Markiston — 8:14 PM
-se estaban spineando lso dos la misma cosa
-Lolito67 [V5RC],  — 8:14 PM
-aun asi no quita el hehco que todos aun tiene que ayudar
-daniel
-a tu las reglas con joaquin
-toy tratando ede arreglar el lio de github ya que todos no tenemso el mismo locationq ue gabriel
- [V5RC], 
-Helado de chocolate (Frio) [GMBL],  — 8:16 PM
-q reglas
-yo no me se las reglas del juego porq yo nunca lo juge
-como 3
-veces
-Lolito67 [V5RC],  — 8:17 PM
-tt busca un video es facil el juego
-almeno de explica
-loco nama diciendo tu parte y la de joaquin son las mas dificil
-Adrian — 8:35 PM
-Boy
- [MEME], 
-Lolito67 [V5RC],  — 8:41 PM
-aun asi no quita el hehco que todos aun tiene que ayudar
-Lolito67
- inició una llamada. — 8:41 PM
-Clouty [Poet],  — 8:55 PM
-Imagen
-Clouty [Poet],  — 8:56 PM
-Imagen
-Clouty [Poet],  — 8:58 PM
-Imagen
-Adrian — 8:59 PM
-Imagen
-Helado de chocolate (Frio) [GMBL],  — 9:02 PM
-tuff anime pfp
-Imagen
-Adrian — 9:05 PM
-Imagen
-Jason — 9:23 PM
-@G00dD4Y!
-Imagen
-y ahora van a saca otra
-Imagen
-Imagen
-Adrian — 9:28 PM
-eso ta tuff
-Helado de chocolate (Frio) [GMBL],  — 9:35 PM
-nesesito eso
-Imagen
-Adrian — 9:41 PM
-Imagen
-Lolito67 [V5RC],  — 9:52 PM
-import flet as ft
-import random
-
-CELL = 40
-BOARD = 15
-
-message.txt
-6 KB
-﻿
 import flet as ft
 import random
 
@@ -110,10 +27,15 @@ def main(page: ft.Page):
         height=CELL * BOARD,
     )
 
+    # =========================
+    # FUNCION COLOR CASILLA
+    # =========================
+
     def get_color(r, c):
 
         color = WHITE
 
+        # CASAS GRANDES
         if r < 6 and c < 6:
             color = RED
 
@@ -126,9 +48,12 @@ def main(page: ft.Page):
         elif r > 8 and c > 8:
             color = YELLOW
 
+        # CUADROS QUE MARCASTE
+        # ahora son grises
         if (r, c) in [(5, 5), (5, 9), (9, 5), (9, 9)]:
             color = GRAY
 
+        # ZONAS BLANCAS CERCA DEL CENTRO
         if 6 <= r <= 8 and 0 <= c <= 5:
             color = WHITE
 
@@ -141,9 +66,11 @@ def main(page: ft.Page):
         if 9 <= r <= 14 and 6 <= c <= 8:
             color = WHITE
 
+        # CAMINOS GRISES
         if r == 6 or r == 8 or c == 6 or c == 8:
             color = GRAY
 
+        # CAMINO CENTRAL
         if c == 7 and r < 7:
             color = RED
 
@@ -156,6 +83,7 @@ def main(page: ft.Page):
         if r == 7 and c > 7:
             color = BLUE
 
+        # LUGARES SEGUROS
         safe_spots = [
             (2, 6),
             (6, 12),
@@ -170,10 +98,15 @@ def main(page: ft.Page):
         if (r, c) in safe_spots:
             color = "#9e9e9e"
 
+        # CENTRO
         if 6 <= r <= 8 and 6 <= c <= 8:
             color = WHITE
 
         return color
+
+    # =========================
+    # DIBUJAR TABLERO
+    # =========================
 
     for r in range(BOARD):
         for c in range(BOARD):
@@ -188,6 +121,10 @@ def main(page: ft.Page):
             )
 
             board.controls.append(square)
+
+    # =========================
+    # CENTRO
+    # =========================
 
     center = ft.Container(
         width=CELL * 3,
@@ -220,23 +157,31 @@ def main(page: ft.Page):
 
     board.controls.append(center)
 
+    # =========================
+    # FICHAS
+    # =========================
+
     pieces = [
 
+        # ROJAS
         (1, 1, RED),
         (1, 3, RED),
         (3, 1, RED),
         (3, 3, RED),
 
+        # AZULES
         (1, 11, BLUE),
         (1, 13, BLUE),
         (3, 11, BLUE),
         (3, 13, BLUE),
 
+        # VERDES
         (11, 1, GREEN),
         (11, 3, GREEN),
         (13, 1, GREEN),
         (13, 3, GREEN),
 
+        # AMARILLAS
         (11, 11, YELLOW),
         (11, 13, YELLOW),
         (13, 11, YELLOW),
@@ -281,6 +226,10 @@ def main(page: ft.Page):
 
         board.controls.append(piece)
 
+    # =========================
+    # DADO
+    # =========================
+
     dice_text = ft.Text(
         "🎲 1",
         size=30,
@@ -294,6 +243,10 @@ def main(page: ft.Page):
         dice_text.value = f"🎲 {value}"
 
         page.update()
+
+    # =========================
+    # INTERFAZ
+    # =========================
 
     page.add(
         ft.Column(
