@@ -1,112 +1,286 @@
 import flet as ft
+import flet_audio as fta
 import random
+import time
+
 
 def main(page: ft.Page):
 
-    #DADO
-    def ChangeImage(e):
+    page.title = "Cubilete"
+    page.theme_mode = ft.ThemeMode.DARK
+    page.scroll = "auto"
 
-        imageList = ["images/Dice1.png",
-                     "images/Dice2.png",
-                     "images/Dice3.png",
-                     "images/Dice4.png",
-                     "images/Dice5.png",
-                     "images/Dice6.png"]
+    # =========================
+    # IMAGENES
+    # =========================
+    diceImages = [
+        "images/Dice1.png",
+        "images/Dice2.png",
+        "images/Dice3.png",
+        "images/Dice4.png",
+        "images/Dice5.png",
+        "images/Dice6.png"
+    ]
 
-        number1 = random.randint(1,6)
-        number2 = random.randint(1,6)
-        number3 = random.randint(1,6)
-        number4 = random.randint(1,6)
-        number5 = random.randint(1,6)
+    # =========================
+    # AUDIO
+    # =========================
+    audio = fta.Audio(src="audio/musica chill.mp3")
+    page.services.append(audio)
 
-        if number1 == 1:
-            diceImage.src = imageList[number1 - 1]
-        elif number1 == 2:
-            diceImage.src = imageList[number1 - 1]
-        elif number1 == 3:
-            diceImage.src = imageList[number1 - 1]
-        elif number1 == 4:
-            diceImage.src = imageList[number1 - 1]
-        elif number1 == 5:
-            diceImage.src = imageList[number1 - 1]
-        elif number1 == 6:
-            diceImage.src = imageList[number1 - 1]
+    async def playMusic(e):
+        await audio.play()
 
-        if number2 == 1:
-            diceImage2.src = imageList[number2 - 1]
-        elif number2 == 2:
-            diceImage2.src = imageList[number2 - 1]
-        elif number2 == 3:
-            diceImage2.src = imageList[number2 - 1]
-        elif number2 == 4:
-            diceImage2.src = imageList[number2 - 1]
-        elif number2 == 5:
-            diceImage2.src = imageList[number2 - 1]
-        elif number2 == 6:
-            diceImage2.src = imageList[number2 - 1]
+    async def pauseMusic(e):
+        await audio.pause()
 
-        if number3 == 1:
-            diceImage3.src = imageList[number3 - 1]
-        elif number3 == 2:
-            diceImage3.src = imageList[number3 - 1]
-        elif number3 == 3:
-            diceImage3.src = imageList[number3 - 1]
-        elif number3 == 4:
-            diceImage3.src = imageList[number3 - 1]
-        elif number3 == 5:
-            diceImage3.src = imageList[number3 - 1]
-        elif number3 == 6:
-            diceImage3.src = imageList[number3 - 1]
+    async def resumeMusic(e):
+        await audio.resume()
 
-        if number4 == 1:
-            diceImage4.src = imageList[number4 - 1]
-        elif number4 == 2:
-            diceImage4.src = imageList[number4 - 1]
-        elif number4 == 3:
-            diceImage4.src = imageList[number4 - 1]
-        elif number4 == 4:
-            diceImage4.src = imageList[number4 - 1]
-        elif number4 == 5:
-            diceImage4.src = imageList[number4 - 1]
-        elif number4 == 6:
-            diceImage4.src = imageList[number4 - 1]
+    def volumeChange(e):
+        audio.volume = volumeSlider.value / 100
 
-        if number5 == 1:
-            diceImage5.src = imageList[number5 - 1]
-        elif number5 == 2:
-            diceImage5.src = imageList[number5 - 1]
-        elif number5 == 3:
-            diceImage5.src = imageList[number5 - 1]
-        elif number5 == 4:
-            diceImage5.src = imageList[number5 - 1]
-        elif number5 == 5:
-            diceImage5.src = imageList[number5 - 1]
-        elif number5 == 6:
-            diceImage5.src = imageList[number5 - 1]
+    # =========================
+    # TITULOS
+    # =========================
+    title = ft.Text(
+        "PROYECTO FINAL: CUBILETE ",
+        size=35,
+        weight=ft.FontWeight.BOLD
+    )
 
-        instructionsText.value = f"You spined the numbers {number1}, {number2}, {number3}, {number4} and {number5}"
+    names = ft.Text(
+        "Hecho por Faisal, Daniel, Joaquin y Gabriel",
+        size=18
+    )
+
+    musicText = ft.Text(
+        "Pon musica chill mientras juegas ",
+        size=20
+    )
+
+    # =========================
+    # BOTONES MUSICA
+    # =========================
+    playBtn = ft.ElevatedButton(
+        "Play",
+        on_click=playMusic
+    )
+
+    pauseBtn = ft.ElevatedButton(
+        "Pause",
+        on_click=pauseMusic
+    )
+
+    resumeBtn = ft.ElevatedButton(
+        "Resume",
+        on_click=resumeMusic
+    )
+
+    volumeSlider = ft.Slider(
+        min=0,
+        max=100,
+        value=100,
+        width=250,
+        on_change=volumeChange
+    )
+
+    # =========================
+    # PORTADA
+    # =========================
+    portada = ft.Column(
+        [
+            title,
+            names,
+            musicText,
+
+            ft.Row(
+                [
+                    playBtn,
+                    pauseBtn,
+                    resumeBtn
+                ],
+                alignment=ft.MainAxisAlignment.CENTER
+            ),
+
+            ft.Text("Volume"),
+
+            volumeSlider
+        ],
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER
+    )
+
+    # =========================
+    # FUNCION PARA CREAR JUGADOR
+    # =========================
+    def createPlayer(playerName):
+
+        playerTitle = ft.Text(
+            playerName,
+            size=25,
+            weight=ft.FontWeight.BOLD
+        )
+
+        resultText = ft.Text(
+            "Click spin to roll dice",
+            size=16
+        )
+
+        # =========================
+        # CREAR 6 DADOS
+        # =========================
+        dice1 = ft.Image(src="images/generic.jpg", width=60, height=60)
+        dice2 = ft.Image(src="images/generic.jpg", width=60, height=60)
+        dice3 = ft.Image(src="images/generic.jpg", width=60, height=60)
+        dice4 = ft.Image(src="images/generic.jpg", width=60, height=60)
+        dice5 = ft.Image(src="images/generic.jpg", width=60, height=60)
+        dice6 = ft.Image(src="images/generic.jpg", width=60, height=60)
+
+        diceRow = ft.Row(
+            [
+                dice1,
+                dice2,
+                dice3,
+                dice4,
+                dice5,
+                dice6
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            wrap=True
+        )
+
+        # =========================
+        # SPIN
+        # =========================
+        def spinDice(e):
+
+            resultText.value = f"{playerName} is spinning..."
+            page.update()
+
+            time.sleep(1.5)
+
+            n1 = random.randint(1, 6)
+            n2 = random.randint(1, 6)
+            n3 = random.randint(1, 6)
+            n4 = random.randint(1, 6)
+            n5 = random.randint(1, 6)
+            n6 = random.randint(1, 6)
+
+            dice1.src = diceImages[n1 - 1]
+            dice2.src = diceImages[n2 - 1]
+            dice3.src = diceImages[n3 - 1]
+            dice4.src = diceImages[n4 - 1]
+            dice5.src = diceImages[n5 - 1]
+            dice6.src = diceImages[n6 - 1]
+
+            resultText.value = (
+                f"{playerName} rolled: "
+                f"{n1}, {n2}, {n3}, {n4}, {n5}, {n6}"
+            )
+
+            page.update()
+
+        spinButton = ft.ElevatedButton(
+            f"Spin {playerName}",
+            on_click=spinDice
+        )
+
+        # =========================
+        # PANEL JUGADOR
+        # =========================
+        playerBox = ft.Container(
+            content=ft.Column(
+                [
+                    playerTitle,
+                    resultText,
+                    diceRow,
+                    spinButton
+                ],
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER
+            ),
+
+            border=ft.border.all(2, "white"),
+            border_radius=15,
+            padding=20,
+            margin=10,
+            width=450
+        )
+
+        return playerBox
+
+    # =========================
+    # DOS JUGADORES
+    # =========================
+    player1 = createPlayer("Jugador 1")
+    player2 = createPlayer("Jugador 2")
+
+    game = ft.Column(
+        [
+            ft.Text(
+                "🎮 MODO 2 JUGADORES 🎮",
+                size=30,
+                weight=ft.FontWeight.BOLD
+            ),
+
+            ft.Row(
+                [
+                    player1,
+                    player2
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                wrap=True
+            )
+        ],
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        visible=False
+    )
+
+    # =========================
+    # START
+    # =========================
+    def startGame(e):
+
+        portada.visible = False
+        startButton.visible = False
+
+        game.visible = True
+        restartButton.visible = True
 
         page.update()
 
-    #Page Setup
-    page.theme_mode = ft.ThemeMode.DARK
-    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    # =========================
+    # RESTART
+    # =========================
+    def restartGame(e):
 
-    #Controls del dado
-    instructionsText = ft.Text(value="Click the buttom to roll the dice")
+        game.visible = False
+        restartButton.visible = False
 
-    diceImage = ft.Image(src="images/generic.jpg",width=200,height=200)
+        portada.visible = True
+        startButton.visible = True
 
-    diceImage2 = ft.Image(src="images/generic.jpg",width=200,height=200)
+        page.update()
 
-    diceImage3 = ft.Image(src="images/generic.jpg",width=200,height=200)
+    startButton = ft.ElevatedButton(
+        "Empezar Juego",
+        on_click=startGame
+    )
 
-    diceImage4 = ft.Image(src="images/generic.jpg",width=200,height=200)
+    restartButton = ft.ElevatedButton(
+        "Reiniciar",
+        on_click=restartGame,
+        visible=False
+    )
 
-    diceImage5 = ft.Image(src="images/generic.jpg",width=200,height=200)
+    # =========================
+    # AGREGAR TODO
+    # =========================
+    page.add(
+        portada,
+        startButton,
+        game,
+        restartButton
+    )
 
-    spinButton = ft.Button(content=ft.Text("Spin Dice"),height=50,width=130,style=ft.ButtonStyle(text_style=ft.TextStyle(size=15)),on_click=ChangeImage)
-
-    page.add(instructionsText,ft.Row(controls=[diceImage,diceImage2,diceImage3,diceImage4,diceImage5],alignment=ft.MainAxisAlignment.CENTER),spinButton,)
 
 ft.run(main=main, assets_dir="assets")
