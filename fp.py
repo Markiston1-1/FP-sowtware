@@ -105,7 +105,7 @@ def main(page: ft.Page):
 
     diceImage5 = ft.Image(src="images/generic.jpg",width=200,height=200)
 
-    spinButton = ft.Button(content=ft.Text("Spin Dice"),height=30,width=100,style=ft.ButtonStyle(text_style=ft.TextStyle(size=10)),on_click=ChangeImage)
+    spinButton = ft.Button(content=ft.Text("Spin Dice"),height=50,width=130,style=ft.ButtonStyle(text_style=ft.TextStyle(size=15)),on_click=ChangeImage)
 
     page.add(instructionsText,ft.Row(controls=[diceImage,diceImage2,diceImage3,diceImage4,diceImage5],alignment=ft.MainAxisAlignment.CENTER),spinButton,)
 
