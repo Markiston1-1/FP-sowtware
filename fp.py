@@ -3,88 +3,110 @@ import random
 
 def main(page: ft.Page):
 
-    # tirar dados
+    #DADO
     def ChangeImage(e):
 
-        imageList = [
-            "images/Dice1.png",
-            "images/Dice2.png",
-            "images/Dice3.png",
-            "images/Dice4.png",
-            "images/Dice5.png",
-            "images/Dice6.png"]
+        imageList = ["images/Dice1.png",
+                     "images/Dice2.png",
+                     "images/Dice3.png",
+                     "images/Dice4.png",
+                     "images/Dice5.png",
+                     "images/Dice6.png"]
 
-        number1 = random.randint(1, 6)
-        number2 = random.randint(1, 6)
+        number1 = random.randint(1,6)
+        number2 = random.randint(1,6)
+        number3 = random.randint(1,6)
+        number4 = random.randint(1,6)
+        number5 = random.randint(1,6)
 
-        diceImage.src = imageList[number1 - 1]
-        diceImage2.src = imageList[number2 - 1]
+        if number1 == 1:
+            diceImage.src = imageList[number1 - 1]
+        elif number1 == 2:
+            diceImage.src = imageList[number1 - 1]
+        elif number1 == 3:
+            diceImage.src = imageList[number1 - 1]
+        elif number1 == 4:
+            diceImage.src = imageList[number1 - 1]
+        elif number1 == 5:
+            diceImage.src = imageList[number1 - 1]
+        elif number1 == 6:
+            diceImage.src = imageList[number1 - 1]
 
-        instructionsText.value = f"You rolled {number1} and {number2}"
+        if number2 == 1:
+            diceImage2.src = imageList[number2 - 1]
+        elif number2 == 2:
+            diceImage2.src = imageList[number2 - 1]
+        elif number2 == 3:
+            diceImage2.src = imageList[number2 - 1]
+        elif number2 == 4:
+            diceImage2.src = imageList[number2 - 1]
+        elif number2 == 5:
+            diceImage2.src = imageList[number2 - 1]
+        elif number2 == 6:
+            diceImage2.src = imageList[number2 - 1]
+
+        if number3 == 1:
+            diceImage3.src = imageList[number3 - 1]
+        elif number3 == 2:
+            diceImage3.src = imageList[number3 - 1]
+        elif number3 == 3:
+            diceImage3.src = imageList[number3 - 1]
+        elif number3 == 4:
+            diceImage3.src = imageList[number3 - 1]
+        elif number3 == 5:
+            diceImage3.src = imageList[number3 - 1]
+        elif number3 == 6:
+            diceImage3.src = imageList[number3 - 1]
+
+        if number4 == 1:
+            diceImage4.src = imageList[number4 - 1]
+        elif number4 == 2:
+            diceImage4.src = imageList[number4 - 1]
+        elif number4 == 3:
+            diceImage4.src = imageList[number4 - 1]
+        elif number4 == 4:
+            diceImage4.src = imageList[number4 - 1]
+        elif number4 == 5:
+            diceImage4.src = imageList[number4 - 1]
+        elif number4 == 6:
+            diceImage4.src = imageList[number4 - 1]
+
+        if number5 == 1:
+            diceImage5.src = imageList[number5 - 1]
+        elif number5 == 2:
+            diceImage5.src = imageList[number5 - 1]
+        elif number5 == 3:
+            diceImage5.src = imageList[number5 - 1]
+        elif number5 == 4:
+            diceImage5.src = imageList[number5 - 1]
+        elif number5 == 5:
+            diceImage5.src = imageList[number5 - 1]
+        elif number5 == 6:
+            diceImage5.src = imageList[number5 - 1]
+
+        instructionsText.value = f"You spined the numbers {number1}, {number2}, {number3}, {number4} and {number5}"
 
         page.update()
 
-    # page
+    #Page Setup
     page.theme_mode = ft.ThemeMode.DARK
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    page.scroll = "auto"
 
-    # texto
-    instructionsText = ft.Text("Click the button to roll the dice",size=20)
+    #Controls del dado
+    instructionsText = ft.Text(value="Click the buttom to roll the dice")
 
-    # dados
-    diceImage = ft.Image(src="images/generic.png",width=100,height=100)
+    diceImage = ft.Image(src="images/generic.jpg",width=200,height=200)
 
-    diceImage2 = ft.Image(src="images/generic.png",width=100,height=100)
+    diceImage2 = ft.Image(src="images/generic.jpg",width=200,height=200)
 
-    # boton
-    spinButton = ft.ElevatedButton(content=ft.Text("Spin Dice"),on_click=ChangeImage)
+    diceImage3 = ft.Image(src="images/generic.jpg",width=200,height=200)
 
-    # tablero
-    board = ft.Image(src="images/tabla.png",width=600,height=600,fit=ft.BoxFit.CONTAIN)
+    diceImage4 = ft.Image(src="images/generic.jpg",width=200,height=200)
 
-    # tablero + fichas
-    gameBoard = ft.Stack(
-        width=600,
-        height=600,
-        controls=[board,
+    diceImage5 = ft.Image(src="images/generic.jpg",width=200,height=200)
 
-            # rojas
-            ft.Container(content=ft.Image("images/ficharoja.png", width=35, height=35),left=70,top=70),
+    spinButton = ft.Button(content=ft.Text("Spin Dice"),height=30,width=100,style=ft.ButtonStyle(text_style=ft.TextStyle(size=10)),on_click=ChangeImage)
 
-            ft.Container(content=ft.Image("images/ficharoja.png", width=35, height=35),left=120,top=70),
-
-            ft.Container(content=ft.Image("images/ficharoja.png", width=35, height=35),left=70,top=120),
-
-            ft.Container(content=ft.Image("images/ficharoja.png", width=35, height=35),left=120,top=120),
-
-            # azules
-            ft.Container(content=ft.Image("images/fichaazul.png", width=35, height=35),left=440,top=70),
-
-            ft.Container(content=ft.Image("images/fichaazul.png", width=35, height=35),left=490,top=70),
-
-            ft.Container(content=ft.Image("images/fichaazul.png", width=35, height=35),left=440,top=120),
-
-            ft.Container(content=ft.Image("images/fichaazul.png", width=35, height=35),left=490,top=120),
-
-            # verdes
-            ft.Container(content=ft.Image("images/fichaverde.png", width=35, height=35),left=70,top=440),
-
-            ft.Container(content=ft.Image("images/fichaverde.png", width=35, height=35),left=120,top=440),
-
-            ft.Container(content=ft.Image("images/fichaverde.png", width=35, height=35),left=70,top=490),
-
-            ft.Container(content=ft.Image("images/fichaverde.png", width=35, height=35),left=120,top=490),
-
-            # amarillas
-            ft.Container(content=ft.Image("images/fichaamarilla.png", width=35, height=35),left=440,top=440),
-
-            ft.Container(content=ft.Image("images/fichaamarilla.png", width=35, height=35),left=490,top=440),
-
-            ft.Container(content=ft.Image("images/fichaamarilla.png", width=35, height=35),left=440,top=490),
-
-            ft.Container(content=ft.Image("images/fichaamarilla.png", width=35, height=35),left=490,top=490),])
-
-    page.add(instructionsText,ft.Row([diceImage, diceImage2],alignment=ft.MainAxisAlignment.CENTER),spinButton,gameBoard)
+    page.add(instructionsText,ft.Row(controls=[diceImage,diceImage2,diceImage3,diceImage4,diceImage5],alignment=ft.MainAxisAlignment.CENTER),spinButton,)
 
 ft.run(main=main, assets_dir="assets")
