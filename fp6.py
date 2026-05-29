@@ -38,6 +38,17 @@ def main(page: ft.Page):
 
     audio = fta.Audio(src="images/musica chill.mp3")
   
+  
+    songs = [{"src": "assets/song1.mp3", "title": "Bocanada"},
+        {"src": "assets/song2.mp3", "title": "Subterranean Homesick Alien"},
+        {"src": "assets/song3.mp3", "title": "Lurgee"},
+        {"src": "assets/song4.mp3", "title": "TRUE LUST"},
+        {"src": "assets/song5.mp3", "title": "Sweet boy"},]
+    current_index = 0
+
+    audio = fta.Audio(src=songs[current_index]["src"])
+    
+
     async def playMusic(e):
         await audio.play()
 
@@ -47,23 +58,42 @@ def main(page: ft.Page):
     async def resumeMusic(e):
         await audio.resume()
 
+    async def nextSong(e):
+        nonlocal current_index
+        await audio.pause()
+        current_index = (current_index + 1) % len(songs)
+        audio.src = songs[current_index]["src"]
+        musicText.value = songs[current_index]["title"]
+        page.update()
+        await audio.play()
+
+    async def prevSong(e):
+        nonlocal current_index
+        await audio.pause()
+        current_index = (current_index - 1) % len(songs)
+        audio.src = songs[current_index]["src"]
+        musicText.value = songs[current_index]["title"]
+        page.update()
+        await audio.play()
+
     def volumeChange(e):
         audio.volume = volumeSlider.value / 100
 
 
     title = ft.Text("PROYECTO FINAL: JUEGO CUBILETE", size=35, weight=ft.FontWeight.BOLD)
     names = ft.Text("Hecho por Faisal, Daniel, Joaquin y Gabriel", size=18)
-    musicText = ft.Text("Musica de fondo", size=20)
+
+    musicText = ft.Text(songs[current_index]["title"], size=20, weight=ft.FontWeight.BOLD)
 
     playbutton = ft.ElevatedButton("Play", on_click=playMusic)
     pausebutton = ft.ElevatedButton("Pause", on_click=pauseMusic)
     resumebutton = ft.ElevatedButton("Resume", on_click=resumeMusic)
-
+    prevbutton = ft.ElevatedButton("Anterior", on_click=prevSong)
+    nextbutton = ft.ElevatedButton("Siguiente", on_click=nextSong)
     volumeSlider = ft.Slider(min=0, max=100, value=100, width=250, on_change=volumeChange)
 
-    portada = ft.Column(
-        [title,names,musicText,ft.Row([playbutton, pausebutton, resumebutton], alignment=ft.MainAxisAlignment.CENTER),
-            ft.Text("Volume"),volumeSlider],horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+
+    portada = ft.Column([title,names,musicText,ft.Row([prevbutton, playbutton, pausebutton, resumebutton, nextbutton], alignment=ft.MainAxisAlignment.CENTER),],horizontal_alignment=ft.CrossAxisAlignment.CENTER)
 
     
     def createPlayer(playerName, player_id):
@@ -192,6 +222,7 @@ def main(page: ft.Page):
         startButton.visible = False
         game.visible = True
         restartButton.visible = True
+        inicioButton.visible = True
         page.update()
 
     def restartGame(e):
@@ -206,11 +237,20 @@ def main(page: ft.Page):
         restartButton.visible = False
         portada.visible = True
         startButton.visible = True
+        inicioButton.visible = False
+    def iralinicio(e):
+        game.visible = False
+        restartButton.visible = False
+        inicioButton.visible = False  
+        portada.visible = True
+        startButton.visible = True  
+      
         page.update()
 
-    startButton = ft.ElevatedButton("Empezar Juego", on_click=startGame)
+    startButton = ft.ElevatedButton("Empezar Juego", on_click=startGame, width=250)
     restartButton = ft.ElevatedButton("Reiniciar", on_click=restartGame, visible=False)
+    inicioButton = ft.ElevatedButton("Home page", on_click=iralinicio, visible=False)
 
-    page.add(portada,startButton,game,restartButton)
+    page.add(portada,startButton,game,restartButton,inicioButton)
 
 ft.run(main=main, assets_dir="assets")
