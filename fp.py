@@ -1,7 +1,7 @@
 import flet as ft
 import flet_audio as fta
 import random
-import time
+import asyncio
 
 
 def main(page: ft.Page):
@@ -21,6 +21,18 @@ def main(page: ft.Page):
         "images/Dice5.png",
         "images/Dice6.png"
     ]
+
+    # =========================
+    # NOMBRES DE LOS DADOS
+    # =========================
+    diceNames = {
+        1: "8",
+        2: "J",
+        3: "Q",
+        4: "K",
+        5: "9",
+        6: "As"
+    }
 
     # =========================
     # AUDIO
@@ -44,7 +56,7 @@ def main(page: ft.Page):
     # TITULOS
     # =========================
     title = ft.Text(
-        "PROYECTO FINAL: CUBILETE ",
+        "PROYECTO FINAL: CUBILETE",
         size=35,
         weight=ft.FontWeight.BOLD
     )
@@ -55,7 +67,7 @@ def main(page: ft.Page):
     )
 
     musicText = ft.Text(
-        "Pon musica chill mientras juegas ",
+        "Pon musica chill mientras juegas",
         size=20
     )
 
@@ -93,7 +105,6 @@ def main(page: ft.Page):
             title,
             names,
             musicText,
-
             ft.Row(
                 [
                     playBtn,
@@ -102,9 +113,7 @@ def main(page: ft.Page):
                 ],
                 alignment=ft.MainAxisAlignment.CENTER
             ),
-
             ft.Text("Volume"),
-
             volumeSlider
         ],
         horizontal_alignment=ft.CrossAxisAlignment.CENTER
@@ -122,29 +131,56 @@ def main(page: ft.Page):
         )
 
         resultText = ft.Text(
-            "Click spin to roll dice",
-            size=16
+            "Activa o desactiva los switches para elegir qué dados se vuelven a girar",
+            size=14,
+            text_align=ft.TextAlign.CENTER
         )
 
         # =========================
-        # CREAR 6 DADOS
+        # VALORES INICIALES
         # =========================
-        dice1 = ft.Image(src="images/generic.jpg", width=60, height=60)
-        dice2 = ft.Image(src="images/generic.jpg", width=60, height=60)
-        dice3 = ft.Image(src="images/generic.jpg", width=60, height=60)
-        dice4 = ft.Image(src="images/generic.jpg", width=60, height=60)
-        dice5 = ft.Image(src="images/generic.jpg", width=60, height=60)
-        dice6 = ft.Image(src="images/generic.jpg", width=60, height=60)
+        currentValues = [random.randint(1, 6) for _ in range(6)]
+
+        diceControls = []
+        switches = []
+        diceImagesControls = []
+
+        # =========================
+        # CREAR 6 DADOS CON SWITCH
+        # =========================
+        for i in range(6):
+            diceImage = ft.Image(
+                src=diceImages[currentValues[i] - 1],
+                width=60,
+                height=60
+            )
+
+            diceSwitch = ft.Switch(
+                value=True,
+                label="Girar"
+            )
+
+            diceImagesControls.append(diceImage)
+            switches.append(diceSwitch)
+
+            diceBox = ft.Column(
+                [
+                    ft.Text(
+                        f"Dado {i + 1}",
+                        size=12,
+                        text_align=ft.TextAlign.CENTER
+                    ),
+                    diceSwitch,
+                    diceImage
+                ],
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                spacing=5
+            )
+
+            diceControls.append(diceBox)
 
         diceRow = ft.Row(
-            [
-                dice1,
-                dice2,
-                dice3,
-                dice4,
-                dice5,
-                dice6
-            ],
+            diceControls,
             alignment=ft.MainAxisAlignment.CENTER,
             wrap=True
         )
@@ -152,30 +188,26 @@ def main(page: ft.Page):
         # =========================
         # SPIN
         # =========================
-        def spinDice(e):
-
+        async def spinDice(e):
             resultText.value = f"{playerName} is spinning..."
             page.update()
 
-            time.sleep(1.5)
+            await asyncio.sleep(1.5)
 
-            n1 = random.randint(1, 6)
-            n2 = random.randint(1, 6)
-            n3 = random.randint(1, 6)
-            n4 = random.randint(1, 6)
-            n5 = random.randint(1, 6)
-            n6 = random.randint(1, 6)
+            for i in range(6):
+                if switches[i].value:
+                    currentValues[i] = random.randint(1, 6)
 
-            dice1.src = diceImages[n1 - 1]
-            dice2.src = diceImages[n2 - 1]
-            dice3.src = diceImages[n3 - 1]
-            dice4.src = diceImages[n4 - 1]
-            dice5.src = diceImages[n5 - 1]
-            dice6.src = diceImages[n6 - 1]
+                diceImagesControls[i].src = diceImages[currentValues[i] - 1]
 
             resultText.value = (
                 f"{playerName} rolled: "
-                f"{n1}, {n2}, {n3}, {n4}, {n5}, {n6}"
+                f"{diceNames[currentValues[0]]}, "
+                f"{diceNames[currentValues[1]]}, "
+                f"{diceNames[currentValues[2]]}, "
+                f"{diceNames[currentValues[3]]}, "
+                f"{diceNames[currentValues[4]]}, "
+                f"{diceNames[currentValues[5]]}"
             )
 
             page.update()
@@ -198,7 +230,6 @@ def main(page: ft.Page):
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER
             ),
-
             border=ft.border.all(2, "white"),
             border_radius=15,
             padding=20,
@@ -221,7 +252,6 @@ def main(page: ft.Page):
                 size=30,
                 weight=ft.FontWeight.BOLD
             ),
-
             ft.Row(
                 [
                     player1,
@@ -239,26 +269,20 @@ def main(page: ft.Page):
     # START
     # =========================
     def startGame(e):
-
         portada.visible = False
         startButton.visible = False
-
         game.visible = True
         restartButton.visible = True
-
         page.update()
 
     # =========================
     # RESTART
     # =========================
     def restartGame(e):
-
         game.visible = False
         restartButton.visible = False
-
         portada.visible = True
         startButton.visible = True
-
         page.update()
 
     startButton = ft.ElevatedButton(
